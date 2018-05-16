@@ -122,7 +122,7 @@ class Example extends React.Component {
     this.handleTimer = this.handleTimer.bind(this);
     this.countDown = this.countDown.bind(this);
     this.VisualCountdownInfo = "";
-    this.originalTime = 600;
+    this.originalTime = 0;
   }
   polarToCartesian(centerX, centerY, radius, angleInDegrees) {
     let angleInRadians = (angleInDegrees-90) * Math.PI / 180.0;
@@ -148,8 +148,8 @@ class Example extends React.Component {
     return d;       
   }
   renderVisualCountdown(){
-    console.log(this.originalTime*this.state.time.s);
-    this.VisualCountdownInfo = this.describeArc(200, 200, 100, 0, this.state.time.s*6);//360.0/this.originalTime);
+    console.log(this.state.seconds*360.0/this.originalTime);
+    this.VisualCountdownInfo = this.describeArc(200, 200, 100, 0, this.state.seconds*360.0/this.originalTime);
       return(
         <VisualCountdown
           value={this.VisualCountdownInfo}
@@ -181,11 +181,11 @@ class Example extends React.Component {
 
   handleTimer() {
     if (!this.state.isStarted) { // Start has been pressed
-      this.setState({seconds: this.state.time.h*3600+this.state.time.m*60+this.state.time.s});
+      this.setState({seconds: this.state.time.h*3600+this.state.time.m*60+this.state.time.s}, function(){
+        this.originalTime = this.state.seconds;
+      });
       this.timer = setInterval(this.countDown, 1000);
       this.setState({isStarted: true});
-      this.originalTime = this.state.seconds;
-      // alert(this.state.seconds);
     }
     else { // Stop has been pressed
       clearInterval(this.timer);
