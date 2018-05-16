@@ -117,12 +117,14 @@ function VisualCountdown (props){
 class Example extends React.Component {
   constructor() {
     super();
-    this.state = { time: {}, seconds: null, isStarted: false, countdownStatus: 'stopped'};
+    this.state = { time: {}, seconds: null, isStarted: false, interval: 0, countdownStatus: 'stopped'}; // paused, started, stopped
     this.timer = 0;
     this.handleTimer = this.handleTimer.bind(this);
     this.countDown = this.countDown.bind(this);
+    this.renderVisualCountdown = this.renderVisualCountdown.bind(this);
     this.VisualCountdownInfo = "";
-    this.originalTime = 0;
+    this.originalTime = {time: {}, seconds: null};
+    this.totalIntervals = 1;
   }
   polarToCartesian(centerX, centerY, radius, angleInDegrees) {
     let angleInRadians = (angleInDegrees-90) * Math.PI / 180.0;
@@ -148,8 +150,8 @@ class Example extends React.Component {
     return d;       
   }
   renderVisualCountdown(){
-    console.log(this.state.seconds*360.0/this.originalTime);
-    this.VisualCountdownInfo = this.describeArc(200, 200, 100, 0, this.state.seconds*360.0/this.originalTime);
+    console.log(this.state.countdownStatus == 'stopped');
+    this.VisualCountdownInfo = (this.state.countdownStatus == 'stopped') ? this.describeArc(200, 200, 100, 0, 0/*359.99*/) : this.describeArc(200, 200, 100, 0, this.state.seconds*360.0/this.originalTime.seconds);
       return(
         <VisualCountdown
           value={this.VisualCountdownInfo}
@@ -180,17 +182,25 @@ class Example extends React.Component {
   }
 
   handleTimer() {
-    if (!this.state.isStarted) { // Start has been pressed
-      this.setState({seconds: this.state.time.h*3600+this.state.time.m*60+this.state.time.s}, function(){
-        this.originalTime = this.state.seconds;
-      });
-      this.timer = setInterval(this.countDown, 1000);
-      this.setState({isStarted: true});
-    }
-    else { // Stop has been pressed
-      clearInterval(this.timer);
-      console.log(this.timer);
-      this.setState({isStarted: false});
+    switch (this.state.countdownStatus) {
+      case 'stopped':
+        let originalSeconds = this.originalTime.time.h*3600+this.originalTime.time.m*60+this.originalTime.time.s;
+        this.setState({time: this.originalTime.time, seconds: originalSeconds});
+        this.originalTime.seconds = originalSeconds;
+        this.timer = setInterval(this.countDown, 1000);
+        this.setState({countdownStatus: 'started'});
+        console.log("was stopped!");
+        break;
+      case 'paused':
+        this.timer = setInterval(this.countDown, 1000);
+        this.setState({countdownStatus: 'started'});
+        console.log(" was paused")
+        break;
+      case 'started':
+        clearInterval(this.timer);
+        this.setState({countdownStatus: 'paused'});
+        console.log("was started!");
+        break;
     }
   }
 
@@ -204,42 +214,66 @@ class Example extends React.Component {
     
     // Check if we're at zero.
     if (seconds === 0) { 
-      this.setState({isStarted: false});
-      clearInterval(this.timer);
+      if (this.state.interval == this.totalIntervals) { // Intervals over
+        this.setState({countdownStatus: 'stopped'});
+        clearInterval(this.timer);
+        this.setState({interval:1});
+      }
+      else { // More intervals to go
+        this.setState({seconds: this.originalTime.seconds}, this.componentDidMount());
+        this.addInterval();
+      }
     }
   }
 
-
-  handleSecondChange(event) {
-    const time = Object.assign({},this.state.time);
-    time.s = Number(event.target.value);
-    this.setState({time: time});
-    // componentDidMount();
-
+  addInterval = () =>{
+    this.setState(prevState => {
+       return {interval: prevState.interval + 1}
+    })
   }
+
   handleTimeChange(event) {
     const time = Object.assign({},this.state.time);
     (event.target.name === "hours") ? (time.h = Number(event.target.value)):(time.m = Number(event.target.value));
-    this.setState({time: time});  
+    // this.setState({time: time});
+    this.originalTime.time = time;
+    console.log(this.originalTime);  
   }
 
+  handleIntervalChange(event) {
+    this.totalIntervals = Number(event.target.value);
+    this.setState({interval:1});
+  }
   handleFocus(event){
     event.target.select();
   }
 
   render() {
-    const status = (this.state.isStarted) ? 'Stop' : 'Start'
+    const status = (this.state.countdownStatus == 'started') ? 'Pause' : 'Start';
     return(
       <div>
         <div>
-          <input type="text" name="hours" value = {this.state.time.h} onChange={this.handleTimeChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
-          h
-          <input type="text" name="minutes" value = {this.state.time.m} onChange={this.handleTimeChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
-          min
-          <button onClick={this.handleTimer.bind(this)}>{status}</button>
+          <div>
+            <input type="text" name="hours" value = {this.originalTime.h} onChange={this.handleTimeChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
+            h
+          </div>
+          <div>
+            <input type="text" name="minutes" value = {this.originalTime.m} onChange={this.handleTimeChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
+            min
+          </div>
+          <div>
+            <input type="text" name="intervals" value = {this.totalIntervals} onChange={this.handleIntervalChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
+            intervals
+          </div>
+          <div>
+            <button onClick={this.handleTimer.bind(this)}>{status}</button>
+          </div>
         </div>
         <div>
           {minTwoDigits(this.state.time.h)}:{minTwoDigits(this.state.time.m)}:{minTwoDigits(this.state.time.s)}
+        </div>
+        <div>
+          {this.state.countdownStatus == 'stopped' ? null: this.state.interval + "/" + this.totalIntervals}
         </div>
         <div>
           {this.renderVisualCountdown()}
