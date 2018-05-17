@@ -19,7 +19,7 @@ class VisualCountdownIntervals extends React.Component {
     this.countDown = this.countDown.bind(this);
     this.renderVisualCountdown = this.renderVisualCountdown.bind(this);
     this.VisualCountdownInfo = "";
-    this.originalTime = {time: {}, seconds: null};
+    this.originalTime = {time: {h:0, m:0, s:0}, seconds: null};
     this.totalIntervals = 1;
   }
 
@@ -47,7 +47,8 @@ class VisualCountdownIntervals extends React.Component {
     return d;       
   }
   renderVisualCountdown(){
-    this.VisualCountdownInfo = (this.state.countdownStatus === 'stopped') ? this.describeArc(200, 200, 100, 0, 0/*359.99*/) : this.describeArc(200, 200, 100, 0, this.state.seconds*360.0/this.originalTime.seconds);
+    let angle = this.state.seconds*360.0/this.originalTime.seconds;
+    this.VisualCountdownInfo = (this.state.countdownStatus === 'stopped' || angle === 360) ? this.describeArc(200, 200, 100, 0, 359.99) : this.describeArc(200, 200, 100, 0, angle);
       return(
         <VisualCountdown
           value={this.VisualCountdownInfo}
@@ -82,6 +83,7 @@ class VisualCountdownIntervals extends React.Component {
     switch (this.state.countdownStatus) {
 
       case 'stopped':
+        console.log(this.originalTime.time.h);
         let originalSeconds = this.originalTime.time.h*3600+this.originalTime.time.m*60+this.originalTime.time.s;
         this.setState({time: this.originalTime.time, seconds: originalSeconds});
         this.originalTime.seconds = originalSeconds;
@@ -133,9 +135,10 @@ class VisualCountdownIntervals extends React.Component {
   }
 
   handleTimeChange(event) {
-    const time = Object.assign({},this.state.time);
+    const time = Object.assign({},this.originalTime.time);
     (event.target.name === "hours") ? (time.h = Number(event.target.value)):(time.m = Number(event.target.value));
     this.originalTime.time = time;
+    console.log(this.originalTime.time);
   }
 
   handleIntervalChange(event) {
@@ -153,15 +156,15 @@ class VisualCountdownIntervals extends React.Component {
 
         <div>
           <div>
-            <input type="text" name="hours" value = {this.originalTime.h} onChange={this.handleTimeChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
+            <input type="number" min="0" name="hours" value = {this.originalTime.h} onChange={this.handleTimeChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
             h
           </div>
           <div>
-            <input type="text" name="minutes" value = {this.originalTime.m} onChange={this.handleTimeChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
+            <input type="number" min="0" name="minutes" value = {this.originalTime.m} onChange={this.handleTimeChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
             min
           </div>
           <div>
-            <input type="text" name="intervals" value = {this.totalIntervals} onChange={this.handleIntervalChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
+            <input type="number" min="1" name="intervals" value = {this.totalIntervals} onChange={this.handleIntervalChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
             intervals
           </div>
           <div>
