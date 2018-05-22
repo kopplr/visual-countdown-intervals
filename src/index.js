@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Sound from 'react-sound';
 import './index.css';
+import Beep from './beep-sound.mp3';
 
 function VisualCountdown (props){  
   return(
@@ -11,9 +13,9 @@ function VisualCountdown (props){
 }
 
 class VisualCountdownIntervals extends React.Component {
-  constructor() {
-    super();
-    this.state = { time: {}, seconds: null, isStarted: false, interval: 1, countdownStatus: 'stopped'}; // paused, started, stopped
+  constructor(props) {
+    super(props);
+    this.state = { time: {}, seconds: null, isStarted: false, interval: 1, countdownStatus: 'stopped', playStatus: Sound.status.STOPPED}; // paused, started, stopped
     this.timer = 0;
     this.handleButtonTimer = this.handleButtonTimer.bind(this);
     this.countDown = this.countDown.bind(this);
@@ -83,25 +85,24 @@ class VisualCountdownIntervals extends React.Component {
     switch (this.state.countdownStatus) {
 
       case 'stopped':
-        console.log(this.originalTime.time.h);
         let originalSeconds = this.originalTime.time.h*3600+this.originalTime.time.m*60+this.originalTime.time.s;
-        this.setState({time: this.originalTime.time, seconds: originalSeconds});
-        this.originalTime.seconds = originalSeconds;
-        this.timer = setInterval(this.countDown, 1000);
-        this.setState({countdownStatus: 'started'});
-        console.log("was stopped!");
+        if(originalSeconds) {
+          this.setState({time: this.originalTime.time, seconds: originalSeconds});
+          this.originalTime.seconds = originalSeconds;
+          this.timer = setInterval(this.countDown, 1000);
+          this.setState({countdownStatus: 'started'});
+        }
+        
         break;
 
       case 'paused':
         this.timer = setInterval(this.countDown, 1000);
         this.setState({countdownStatus: 'started'});
-        console.log(" was paused")
         break;
 
       case 'started':
         clearInterval(this.timer);
         this.setState({countdownStatus: 'paused'});
-        console.log("was started!");
         
     }
   }
@@ -109,6 +110,11 @@ class VisualCountdownIntervals extends React.Component {
   countDown() {
     // Remove one second, set state so a re-render happens.
     let seconds = this.state.seconds - 1;
+    // let mySound = new Audio('../audio/beep-sound.mp3');
+    // mySound.play();
+
+    // document.getElementById('audioplayer').play();
+    
     this.setState({
       time: this.secondsToTime(seconds),
       seconds: seconds,
@@ -117,13 +123,17 @@ class VisualCountdownIntervals extends React.Component {
     // Check if we're at zero.
     if (seconds === 0) { 
       if (this.state.interval === this.totalIntervals) { // Intervals over
+        document.getElementById('audioplayer').play();
         this.setState({countdownStatus: 'stopped'});
         clearInterval(this.timer);
-        this.setState({interval:1});
+        this.setState({interval: 1});        
+        // this.setState({playStatus: Sound.status.PLAYING});
       }
       else { // More intervals to go
+        document.getElementById('audioplayer').play();
         this.setState({seconds: this.originalTime.seconds}, this.componentDidMount());
         this.addInterval();
+
       }
     }
   }
@@ -136,7 +146,17 @@ class VisualCountdownIntervals extends React.Component {
 
   handleTimeChange(event) {
     const time = Object.assign({},this.originalTime.time);
-    (event.target.name === "hours") ? (time.h = Number(event.target.value)):(time.m = Number(event.target.value));
+    switch (event.target.name) {
+      case 'hours':
+        time.h = Number(event.target.value);
+        break;
+      case 'minutes':
+        time.m = Number(event.target.value);
+        break;
+      case 'seconds':
+        time.s = Number(event.target.value)
+    }
+
     this.originalTime.time = time;
     console.log(this.originalTime.time);
   }
@@ -157,11 +177,10 @@ class VisualCountdownIntervals extends React.Component {
         <div>
           <div>
             <input type="number" min="0" name="hours" value = {this.originalTime.h} onChange={this.handleTimeChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
-            h
-          </div>
-          <div>
+            :
             <input type="number" min="0" name="minutes" value = {this.originalTime.m} onChange={this.handleTimeChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
-            min
+            :
+            <input type="number" min="0" name="seconds" value = {this.originalTime.s} onChange={this.handleTimeChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
           </div>
           <div>
             <input type="number" min="1" name="intervals" value = {this.totalIntervals} onChange={this.handleIntervalChange.bind(this)} onFocus={this.handleFocus.bind(this)}/>
@@ -184,6 +203,13 @@ class VisualCountdownIntervals extends React.Component {
             {this.state.countdownStatus === 'stopped' ? null : this.state.interval + "/" + this.totalIntervals}
           </div>
         </div>
+
+        <Sound
+          url={Beep}
+          playStatus={this.state.playStatus} 
+          autoload='true'
+        /> 
+        <audio id='audioplayer' src={Beep} ></audio>
 
       </div>
     );
