@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Sound from 'react-sound';
 import './index.css';
 import Beep from './beep-sound.mp3';
 import IntervalImg from './intervals.svg';
@@ -16,7 +15,7 @@ function VisualCountdown (props){
 class VisualCountdownIntervals extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { time: {}, seconds: null, isStarted: false, interval: 1, countdownStatus: 'stopped', playStatus: Sound.status.STOPPED, originalTime: {time: {h:0, m:0, s:0}, seconds: null}}; // paused, started, stopped
+    this.state = { time: {}, seconds: null, isStarted: false, interval: 1, countdownStatus: 'stopped', originalTime: {time: {h:0, m:0, s:0}, seconds: null}}; // paused, started, stopped
     this.timer = 0;
     this.handleButtonTimer = this.handleButtonTimer.bind(this);
     this.countDown = this.countDown.bind(this);
@@ -116,10 +115,6 @@ class VisualCountdownIntervals extends React.Component {
   countDown() {
     // Remove one second, set state so a re-render happens.
     let seconds = this.state.seconds - 1;
-    // let mySound = new Audio('../audio/beep-sound.mp3');
-    // mySound.play();
-
-    // document.getElementById('audioplayer').play();
     
     this.setState({
       time: this.secondsToTime(seconds),
@@ -133,7 +128,6 @@ class VisualCountdownIntervals extends React.Component {
         this.setState({countdownStatus: 'stopped'});
         clearInterval(this.timer);
         this.setState({interval: 1});        
-        // this.setState({playStatus: Sound.status.PLAYING});
       }
       else { // More intervals to go
         document.getElementById('audioplayer').play();
@@ -216,15 +210,6 @@ class VisualCountdownIntervals extends React.Component {
           {this.renderVisualCountdown()}
         </div>
 
-        
-
-        <div>
-          <Sound
-            url={Beep}
-            playStatus={this.state.playStatus} 
-            autoload='true'
-          /> 
-        </div>
         <audio id='audioplayer' src={Beep} ></audio>
 
       </div>
