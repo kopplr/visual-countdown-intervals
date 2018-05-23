@@ -18,6 +18,13 @@
    sodipodi:docname="intervals.svg">
   <defs
      id="defs2">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 67.73333 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="135.46666 : 67.73333 : 1"
+       inkscape:persp3d-origin="67.73333 : 45.155553 : 1"
+       id="perspective1543" />
     <marker
        inkscape:stockid="Arrow2Mend"
        orient="auto"
@@ -144,20 +151,20 @@
        x="110.97516"
        y="188.04742" />
     <path
-       style="fill:none;fill-opacity:0.0627451;stroke:#000000;stroke-width:13.22916603;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;fill-opacity:0.0627451;stroke:#000000;stroke-width:11.30156422;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path839"
        sodipodi:type="arc"
-       sodipodi:cx="106.82368"
-       sodipodi:cy="194.97577"
-       sodipodi:rx="59.217941"
-       sodipodi:ry="59.217941"
+       sodipodi:cx="106.82301"
+       sodipodi:cy="199.01556"
+       sodipodi:rx="56.210472"
+       sodipodi:ry="56.210453"
        sodipodi:start="0.87266463"
        sodipodi:end="5.5850536"
        sodipodi:open="true"
-       d="m 144.88824,240.33934 a 59.217941,59.217941 0 0 1 -83.428138,-7.29901 59.217941,59.217941 0 0 1 7.299016,-83.42814 59.217941,59.217941 0 0 1 83.428132,7.29902" />
+       d="m 142.95441,242.07527 a 56.210472,56.210453 0 0 1 -79.191117,-6.92832 56.210472,56.210453 0 0 1 6.928325,-79.19109 56.210472,56.210453 0 0 1 79.191112,6.92832" />
     <path
-       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:13.22916603;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 155.95355,130.28827 v 32.39792 h -32.39791"
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:13.18171215;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 155.9812,137.23977 v 32.28168 h -32.28176"
        id="rect1512"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccc" />
