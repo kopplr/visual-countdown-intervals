@@ -1,4 +1,4 @@
-@media (max-width: 754px) {
+@media (max-width: 714px) {
 	#title {
 		text-align: center;
 	}
@@ -11,11 +11,28 @@
 	#countdownInterval, #countdownTimer {
 		justify-content: center;
 	}
-
+	html {
+		min-height: 700px;
+	}
+	.hidden {
+		display: none !important;
+	}
+	.show {
+		display: flex !important;
+	}
+}
+html {
+	height: 100%;
+	margin: 0;
 }
 body {
 	font: 25px "Open Sans Condensed", sans-serif;
-	margin: 20px;
+	margin: 0;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
 }
 input {
 	font-family: "Open Sans Condensed", sans-serif;
@@ -25,6 +42,16 @@ input {
 	margin  : 0 5px;
 	width   : 40px;
 	text-align: center;
+}
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+    cursor: text;
 }
 button {
 	font-family: "Open Sans Condensed", sans-serif;
@@ -36,18 +63,32 @@ button {
 	cursor: pointer;
 	width: 180px;
 }
+button i {
+	margin-right: 10px;
+}
+button, input {
+    outline: 0;
+    outline-color: initial;
+    outline-style: initial;
+    outline-width: 0px;
+}
 button:hover {
 	background-color: #DDDDDD;
+}
+#root {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	height: 100%;
 }
 #container {
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
-/*	align-items: center;*/
 }
 #information div{
 	display: flex;
-	/*justify-content: center;*/
 }
 #information {
 	margin: 20px;
@@ -63,7 +104,6 @@ button:hover {
 #countdownInfo, #userInput {
 	display: flex;
 	flex-direction: column;
-	/*justify-content: center;*/
 }
 #userInput {
 	display: flex;
@@ -73,30 +113,15 @@ button:hover {
 #countdownInfo {
 	width: 180px;
 }
-/*#visualCountdown {
+#visualCountdown {
 	display: flex;
-	flex: 1;
-}*/
-button i {
-	margin-right: 10px;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 10px;
 }
-div i, div img {
-	/*margin-right: 5px;*/
+.hidden {
+	visibility: hidden;
 }
-input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-input[type=number] {
-    -moz-appearance:textfield;
-    cursor: text;
-}
-
-button, input {
-    outline: 0;
-    outline-color: initial;
-    outline-style: initial;
-    outline-width: 0px;
+.show {
+	visibility: visible;
 }
