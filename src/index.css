@@ -61,9 +61,13 @@ button {
 	padding: 5px;
 	margin: 5px 0;
 	cursor: pointer;
-	width: 180px;
+	display:flex;
+	align-items: center;
+	justify-content: center;
+	width: 60px;
+	
 }
-button i {
+.bigButton i {
 	margin-right: 10px;
 }
 button, input {
@@ -74,6 +78,9 @@ button, input {
 }
 button:hover {
 	background-color: #DDDDDD;
+}
+.bigButton {
+	width: 180px;
 }
 #root {
 	display: flex;
@@ -124,4 +131,7 @@ button:hover {
 }
 .show {
 	visibility: visible;
+}
+.highlightClass {
+	background-color: #FF4136;
 }
