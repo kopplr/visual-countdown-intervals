@@ -57,14 +57,15 @@ button {
 	font-family: "Open Sans Condensed", sans-serif;
 	font-size: 30px;
 	background-color: white;
-	border: 1px solid black;
-	padding: 5px;
+	border: none;
+	padding: 10px;
 	margin: 5px 0;
 	cursor: pointer;
 	display:flex;
 	align-items: center;
 	justify-content: center;
-	width: 60px;
+	width: 50px;
+	border-radius: 50%;
 	
 }
 .bigButton i {
@@ -76,10 +77,17 @@ button, input {
     outline-style: initial;
     outline-width: 0px;
 }
-button:hover {
-	background-color: #DDDDDD;
-}
 .bigButton {
+	width: 180px;
+	border: 1px solid black;
+	border-radius: initial;
+}
+#soundControl button {
+	border-right: none;
+}
+#soundControl {
+	display: flex;
+	justify-content: space-between;
 	width: 180px;
 }
 #root {
@@ -116,6 +124,9 @@ button:hover {
 	display: flex;
 	flex-direction: column;
 	width: 180px;
+	border-bottom: 1px solid black;
+	margin-bottom: 5px;
+	padding-bottom: 5px;
 }
 #countdownInfo {
 	width: 180px;
@@ -134,4 +145,23 @@ button:hover {
 }
 .highlightClass {
 	background-color: #FF4136;
+	cursor: default;
+	/*color: #111;	*/
+}
+.notReady {
+/*	background-color: #DDDDDD;
+	cursor: not-allowed;*/
+	border: 1px solid #FF4136;
+}
+.ready {
+	border: 1px solid #FF4136;
+}
+button:disabled {
+	background-color: #DDDDDD;
+	cursor: not-allowed;
+}
+.userInput {
+	border-bottom: 1px solid black;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
 }

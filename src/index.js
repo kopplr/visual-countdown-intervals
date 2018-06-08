@@ -93,7 +93,7 @@ class VisualCountdownIntervals extends React.Component {
 
       case 'stopped':
         let originalSeconds = this.state.originalTime.time.h*3600+this.state.originalTime.time.m*60+this.state.originalTime.time.s;
-        if(originalSeconds) {
+        if(originalSeconds) { // Check to see if a time interval has been set
           let originalTime = Object.assign({}, this.state.originalTime);
           originalTime.seconds = originalSeconds;
           this.setState({time: this.state.originalTime.time, seconds: originalSeconds});
@@ -131,7 +131,7 @@ class VisualCountdownIntervals extends React.Component {
     if (seconds === 0) { 
       if (this.state.interval === this.totalIntervals) { // Intervals over
         if (this.state.soundStatus === 'on') {
-          document.getElementById('axwudioplayer').play();
+          document.getElementById('audioplayer').play();
         }
         if (this.state.soundStatus === 'on' || this.state.soundStatus === 'vibrate') {
           window.navigator.vibrate([1000,1000]);
@@ -141,7 +141,12 @@ class VisualCountdownIntervals extends React.Component {
         this.setState({interval: 1});        
       }
       else { // More intervals to go
-        document.getElementById('audioplayer').play();
+        if (this.state.soundStatus === 'on') {
+          document.getElementById('audioplayer').play();
+        }
+        if (this.state.soundStatus === 'on' || this.state.soundStatus === 'vibrate') {
+          window.navigator.vibrate([1000,1000]);
+        } 
         window.navigator.vibrate([1000]);
         this.setState({seconds: this.state.originalTime.seconds}, this.componentDidMount());
         this.addInterval();
@@ -182,7 +187,7 @@ class VisualCountdownIntervals extends React.Component {
   handleSoundChange(event) {
     console.log(event.name);
     console.log(event.target);
-    console.log(event);
+    console.log(event.target.id);
     this.setState({soundStatus: event.target.id});
   }
 
@@ -190,7 +195,6 @@ class VisualCountdownIntervals extends React.Component {
   render() {
     const status = (this.state.countdownStatus === 'started') ? 'PAUSE' : 'START';
     const visibilityClass = (this.state.countdownStatus === 'stopped') ? 'hidden' : 'show';
-    (this.state.soundStatus === 'on')
     return(
       <div id="container">
         
@@ -214,12 +218,12 @@ class VisualCountdownIntervals extends React.Component {
             </div>
           </div>
           <div id="soundControl">
-            <button onClick={this.handleSoundChange.bind(this)} className={this.state.soundStatus === "on" ? "highlightClass" : ""}><i id="on" className="far fa-bell"></i></button>
-            <button onClick={this.handleSoundChange.bind(this)} className={this.state.soundStatus === "vibrate" ? "highlightClass" : ""}><img id="vibrate" src={VibrateImg} width="30px" height="30px" alt="vibrate-icon"></img></button>
-            <button  onClick={this.handleSoundChange.bind(this)} className={this.state.soundStatus === "off" ? "highlightClass" : ""}><i id="off" className="far fa-bell-slash"></i></button>
+            <button value="soundOn" id="on" onClick={this.handleSoundChange.bind(this)} className={this.state.soundStatus === "on" ? "highlightClass" : "noHighlight"}><i id="on" className="far fa-bell"></i></button>
+            <button value="vibrate" id="vibrate" onClick={this.handleSoundChange.bind(this)} className={this.state.soundStatus === "vibrate" ? "highlightClass" : "noHighlight"}><img id="vibrate" src={VibrateImg} width="30px" height="30px" alt="vibrate-icon"></img></button>
+            <button value="soundOff" id="off"onClick={this.handleSoundChange.bind(this)} className={this.state.soundStatus === "off" ? "highlightClass" : "noHighlight"}><i id="off" className="far fa-bell-slash"></i></button>
           </div>
           <div id="startButton">
-            <button className="bigButton" onClick={this.handleButtonTimer.bind(this)}>{this.state.countdownStatus === 'stopped' ||  this.state.countdownStatus === 'paused'? <i className="far fa-play-circle"></i> : <i className="far fa-pause-circle"></i>}{status}</button>
+            <button className="bigButton" disabled={!(this.state.originalTime.time.h || this.state.originalTime.time.m || this.state.originalTime.time.s)} onClick={this.handleButtonTimer.bind(this)}>{this.state.countdownStatus === 'stopped' ||  this.state.countdownStatus === 'paused'? <i className="far fa-play-circle"></i> : <i className="far fa-pause-circle"></i>}{status}</button>
           </div>
           <div id="countdownInfo">
             <div id="countdownTimer" className={visibilityClass}>
