@@ -1,8 +1,9 @@
 {
-  "main.css": "static/css/main.5c320852.css",
-  "main.css.map": "static/css/main.5c320852.css.map",
-  "main.js": "static/js/main.8ba6d0de.js",
-  "main.js.map": "static/js/main.8ba6d0de.js.map",
+  "main.css": "static/css/main.264e4762.css",
+  "main.css.map": "static/css/main.264e4762.css.map",
+  "main.js": "static/js/main.c661fa34.js",
+  "main.js.map": "static/js/main.c661fa34.js.map",
   "static\\media\\beep-sound.mp3": "static/media/beep-sound.487d0627.mp3",
-  "static\\media\\intervals.svg": "static/media/intervals.7027ccf7.svg"
+  "static\\media\\intervals.svg": "static/media/intervals.7027ccf7.svg",
+  "static\\media\\vibrate.svg": "static/media/vibrate.a4be6868.svg"
 }
